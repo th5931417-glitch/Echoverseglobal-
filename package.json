@@ -1,0 +1,30 @@
+json
+{
+  "name": "echoverseglobal",
+  "version": "1.0.0",
+  "description": "EchoVerseGlobal - Global AI Express API server for ElevenLabs Text-to-Speech, supporting 30+ languages with male & female voices",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "express",
+    "api",
+    "tts",
+    "ai",
+    "voice",
+    "global",
+    "multilingual",
+    "male",
+    "female",
+    "elevenlabs",
+    "text-to-speech"
+  ],
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^2.6.7"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
