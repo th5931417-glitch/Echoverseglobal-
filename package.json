@@ -4,8 +4,7 @@
   "description": "EchoVerseGlobal - Global AI Express API server for ElevenLabs Text-to-Speech, supporting 30+ languages with male & female voices",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "build": "echo \"No build step required\""
+    "start": "node index.js"
   },
   "keywords": [
     "express",
@@ -25,7 +24,6 @@
     "node-fetch": "^2.6.7"
   },
   "engines": {
-    "node": "22.x"
-  },
-  "license": "MIT"
+    "node": "18.x"
+  }
 }
