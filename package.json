@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "build": "echo 'No build step required'"
+    "build": "echo \"No build step required\""
   },
   "keywords": [
     "express",
@@ -25,6 +25,7 @@
     "node-fetch": "^2.6.7"
   },
   "engines": {
-    "node": "18.x"
-  }
+    "node": "22.x"
+  },
+  "license": "MIT"
 }
