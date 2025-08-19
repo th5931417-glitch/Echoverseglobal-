@@ -1,51 +1,57 @@
-
-const express = require('express');
-const fetch = require('node-fetch');
+import express from "express";
+import fetch from "node-fetch";
 
 const app = express();
-
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-const PORT = process.env.PORT || 3000;
-const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
-
-app.get('/', (req, res) => {
-  res.send('✅ EchoVerseGlobal API is running...');
+// ✅ Home route
+app.get("/", (req, res) => {
+  res.send("🌍 EchoVerseGlobal API is running...");
 });
 
-app.post('/api/tts', async (req, res) => {
+// ✅ TTS API route
+app.post("/api/tts", async (req, res) => {
   try {
-    const { text, voice = 'Rachel' } = req.body;
-    if (!text) {
-      return res.status(400).json({ error: 'Text is required' });
+    const { text, voice_id } = req.body;
+
+    if (!text || !voice_id) {
+      return res.status(400).json({ error: "Missing text or voice_id" });
     }
 
-    const response = await fetch('https://api.elevenlabs.io/v1/text-to-speech/' + encodeURIComponent(voice), {
-      method: 'POST',
+    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voice_id}`, {
+      method: "POST",
       headers: {
-        'xi-api-key': ELEVENLABS_API_KEY,
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
+        "xi-api-key": process.env.ELEVENLABS_API_KEY   // 🔑 তোমার API Key vercel এ env variable এ দিতে হবে
       },
-      body: JSON.stringify({ text })
+      body: JSON.stringify({
+        text: text,
+        voice_settings: {
+          stability: 0.5,
+          similarity_boost: 0.75
+        }
+      })
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      return res.status(response.status).json(errorData);
+      return res.status(response.status).json({ error: "TTS request failed" });
     }
 
+    // ElevenLabs থেকে Audio stream আসবে (mp3/wav)
     const audioBuffer = await response.arrayBuffer();
-    res.set({
-      'Content-Type': 'audio/mpeg',
-      'Content-Length': audioBuffer.byteLength
-    });
+
+    res.setHeader("Content-Type", "audio/mpeg");
     res.send(Buffer.from(audioBuffer));
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
+// ✅ Server start (for local test)
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 EchoVerseGlobal API running on port ${PORT}`);
 });
+
+export default app; // Vercel এর জন্য export করতে হবে
